@@ -1,57 +1,60 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { toast } from 'react-toastify';
+import { useNavigate, useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Login = () => {
-
   const navigate = useNavigate();
-
-
-  const initialState = {
-    email: "",
-    password: "",
-  };
-
+  const initialState = { email: "", password: "" };
   const [user, setUser] = useState(initialState);
+
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (token) {
+      navigate("/home");
+    }
+  }, []);
 
   const habdleInputChange = (event) => {
     setUser({ ...user, [event.target.name]: event?.target?.value });
   };
 
   function handleSubmit(e) {
-    e.preventDefault();
-
     const { email, password } = user;
 
+    e.preventDefault();
+
     const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
     };
 
-    axios.post(
-      "http://localhost:4000/login",
-      {
-        email,
-        password,
-      },
-      {
-        withCredentials: true,
-      },
-      config
-    )
-    .then((res) => {
-      if(res.data === "success") {
-        navigate("/home");
-      }
-    },
-    () => {
-      toast.error("Email o contraseña incorrectos");
-    } 
-    )
+    try {
+      axios
+        .post(
+          "http://localhost:4000/login",
+          {
+            email,
+            password,
+          },
+          {
+            withCredentials: true,
+          },
+          config
+        )
+        .then((data) => {
+          localStorage.setItem("token", data.data.token);
+          navigate("/home");
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } catch (error) {
+      console.log(error);
+      setTimeout(() => {}, 5000);
+    }
   }
 
   return (
@@ -142,5 +145,4 @@ const Login = () => {
     </div>
   );
 };
-
 export default Login;

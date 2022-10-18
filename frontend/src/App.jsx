@@ -1,28 +1,26 @@
-import React, { Fragment, useContext } from "react";
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import React from "react";
+import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
-import { Home, Login, Register } from "./components";
+import { Home, Login, Register, Handle404 } from "./components";
 
-import { myContext } from "./components/Context";
+import PrivateRoute from "./lib/PrivateRoute";
 
 function App() {
-  const ctx = useContext(myContext);
-  
-  const userContext = ctx.user;
-  console.log(userContext)
-
   return (
-    <Fragment>
+    <>
       <BrowserRouter>
         <Routes>
+          <Route element={<PrivateRoute />}>
+            <Route path="/home" element={<Home />} />
+          </Route>
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/home" element={<Home />} />
+          <Route path="*" element={<Handle404 />} />
         </Routes>
         <ToastContainer />
       </BrowserRouter>
-    </Fragment>
+    </>
   );
 }
 

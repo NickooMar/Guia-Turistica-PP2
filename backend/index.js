@@ -17,12 +17,20 @@ connectDB();
 //Middleware Initialization
 
 app.use(express.json());
+// app.use(
+//   cors({
+//     origin: "http://localhost:3000", //localización del cliente
+//     credentials: true,
+//   })
+// );
+
 app.use(
   cors({
-    origin: "http://localhost:3000", //localización del cliente
-    credentials: true,
+    origin: "http://localhost:3000",
+    credentials: true,    
   })
 );
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -38,7 +46,7 @@ app.use(passport.session());
 
 //Rutas
 
-app.use(userRoutes)
+app.use(userRoutes);
 
 //----------------------------
 

@@ -28,14 +28,6 @@ const createUser = async (req, res) => {
   });
 };
 
-const loginUser = (_, res) => {
-  res.status(200).json("success");
-};
-
-const getUser = (req, res) => {
-  res.send(req.user);
-};
-
 const logout = (req, res, next) => {
   req.logout(function (err) {
     if (err) {
@@ -47,7 +39,5 @@ const logout = (req, res, next) => {
 
 module.exports = {
   createUser,
-  loginUser,
-  getUser,
   logout,
 };

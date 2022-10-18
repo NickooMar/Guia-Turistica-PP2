@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
-
-  const navigate = useNavigate ();
+  const navigate = useNavigate();
 
   const initialState = {
     email: "",
@@ -16,6 +15,14 @@ const Register = () => {
   };
 
   const [user, setUser] = useState(initialState);
+
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (token) {
+      navigate("/home");
+    }
+  }, []);
 
   const handleInputChange = (event) => {
     setUser({ ...user, [event.target.name]: event?.target?.value });
@@ -49,7 +56,7 @@ const Register = () => {
         )
         .then((res) => {
           if (res.data === "success") {
-            toast.success('Su usuario ha sido creado!')
+            toast.success("Su usuario ha sido creado!");
             navigate("/");
           } else {
             setUser(initialState);
@@ -98,8 +105,8 @@ const Register = () => {
                   name="email"
                   className="bg-gray-500 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Juan@gmail.com"
-                  onChange={handleInputChange} />
-
+                  onChange={handleInputChange}
+                />
               </div>
             </div>
 
@@ -202,6 +209,12 @@ const Register = () => {
             >
               Registrarse
             </button>
+            <Link
+              className="text-center bg-slate-300 hover:bg-slate-300 focus:ring-4 focus:ring-slate-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mt-4 mb-2 dark:bg-slate-300 dark:hover:bg-slate-300 focus:outline-none dark:focus:ring-slate-300"
+              to="/"
+            >
+              Volver
+            </Link>
           </div>
         </div>
       </div>

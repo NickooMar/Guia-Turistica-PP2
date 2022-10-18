@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
@@ -10,26 +10,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import useStyles from "./styles";
 import axios from "axios";
 
-import { myContext } from "../Context";
-
-const Header = ({ setCoordinates }) => {
-  
-  
-  //User Context
-  const ctx = useContext(myContext);
-
-  const { username } = ctx.user;
-
-  
-
-  function logoutFunction(event) {
-    event.preventDefault()
-    ctx.logoutFunction();
-    console.log('Salio')    
-    window.location.href = "/";
-
-  }
-
+const Header = ({ setCoordinates, privateData, logoutHandler }) => {
   //Styles & Search
   const classes = useStyles();
   const [autocomplete, setAutocomplete] = useState(null);
@@ -126,7 +107,8 @@ const Header = ({ setCoordinates }) => {
               </div>
 
               <h2 className="hidden sm:block text-slate-200 hover:text-white font-medium text-lg pr-2">
-                Bienvenido {username?.toUpperCase()}
+                {/* Bienvenido {username?.toUpperCase()} */}
+                Bienvenido {privateData?.username}
               </h2>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:pr-0">
                 {/* Profile dropdown */}
@@ -160,7 +142,7 @@ const Header = ({ setCoordinates }) => {
                           alt="Perfil img"
                         />
                         <h2 className="flex justify-center pt-0.5 text-lg font-light">
-                          {username?.toUpperCase()}
+                          {privateData?.username.toUpperCase()}
                         </h2>
                       </div>
                       <Menu.Item>
@@ -187,7 +169,7 @@ const Header = ({ setCoordinates }) => {
                           )}
                         </Menu.Item> */}
                       <a
-                        onClick={logoutFunction}
+                        onClick={logoutHandler}
                         className={classNames(
                           "block px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100"
                         )}
