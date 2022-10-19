@@ -1,68 +1,49 @@
-// // import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect } from "react";
 
-// // import axios from "axios";
-// // import { Navigate } from "react-router-dom";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-// // export const myContext = createContext({});
+export const myContext = createContext({});
 
-// // export default function Context(props) {
-// //   const [user, setUser] = useState(null);
+export default function Context(props) {
+  const [privateData, setPrivateData] = useState(null);
 
-// //   const token = localStorage.getItem("token");
+  const navigate = useNavigate();
 
-// //   useEffect(() => {
-// //     async function fetchUserProfile() {
-// //       await axios
-// //         .get(`http://localhost:4000/user?secret-token=${token}`, {
-// //           withCredentials: true,
-// //         })
-// //         .then((res) => {
-// //           const userData = res.data;
-// //           setUser(userData);
-// //           localStorage.setItem("user", JSON.stringify(userData));
-// //         });
-// //     }
+  useEffect(() => {
+    const token = localStorage.getItem("token");
 
-// //     fetchUserProfile();
-// //   }, [token]);
+    if (!token) {
+      navigate("/");
+    }
+    async function fetchPrivateData() {
+      try {
+        await axios
+          .get(`http://localhost:4000/user?secret-token=${token}`, {
+            withCredentials: true,
+          })
+          .then((res) => {
+            console.log(res.data)
+            const userPrivateData = res.data;
+            setPrivateData(userPrivateData);
+          });
+      } catch (error) {
+        console.error(error);
+      }
+    }
 
-// //   //   function logoutFunction () {
-// //   //     axios
-// //   //     .post("http://localhost:4000/logout")
-// //   //     .then((res) => {
-// //   //       console.log(res)
-// //   //       if(res.data === "success")
-// //   //       setUser(null);
-// //   //     });
-// //   //   }
+    fetchPrivateData();
+  }, []);
 
-// //   return (
-// //     <myContext.Provider value={{ user }}>{props.children}</myContext.Provider>
-// //   );
-// // }
+  //Logout User
+  const logoutHandler = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
 
-// import { useState, createContext, useContext } from "react";
-
-// const AuthContext = createContext(null);
-
-// export const AuthProvider = ({ children }) => {
-//   const [user, setUser] = useState(null);
-
-//   const login = (user) => {
-//     setUser(user);
-//   };
-
-//   const logout = () => {
-//     setUser(null);
-//   };
-
-//   return (
-//     <AuthContext.Provider value={{ user, login, logout }}>
-//       {children}
-//     </AuthContext.Provider>
-//   );
-// };
-
-// export const useAuth = () => {
-//   return useContext(AuthContext);
-// };
+  return (
+    <myContext.Provider value={{ privateData, logoutHandler }}>
+      {props.children}
+    </myContext.Provider>
+  );
+}

@@ -11,7 +11,7 @@ import Map from "./Map/Map";
 import { Link, useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const [privateData, setPrivateData] = useState(null);
+  // const [privateData, setPrivateData] = useState(null);
 
   const [places, setPlaces] = useState([]);
   const [filteredPlaces, setFilteredPlaces] = useState([]);
@@ -30,36 +30,36 @@ const Home = () => {
   const navigate = useNavigate();
 
   //Backend User Request UseEffect
-  useEffect(() => {
-    const token = localStorage.getItem("token");
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
 
-    if (!token) {
-      navigate("/");
-    }
+  //   if (!token) {
+  //     navigate("/");
+  //   }
 
-    const fetchPrivateData = async () => {
-      try {
-        axios
-          .get(`http://localhost:4000/user?auth-token=${token}`, {
-            withCredentials: true,
-          })
-          .then((res) => {
-            const userPrivateData = res.data;
-            setPrivateData(userPrivateData);
-          });
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  //   const fetchPrivateData = async () => {
+  //     try {
+  //       axios
+  //         .get(`http://localhost:4000/user?auth-token=${token}`, {
+  //           withCredentials: true,
+  //         })
+  //         .then((res) => {
+  //           const userPrivateData = res.data;
+  //           setPrivateData(userPrivateData);
+  //         });
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
 
-    fetchPrivateData();
-  }, []);
+  //   fetchPrivateData();
+  // }, []);
 
-  //Logout User
-  const logoutHandler = () => {
-    localStorage.removeItem("token");
-    navigate("/");
-  };
+  // //Logout User
+  // const logoutHandler = () => {
+  //   localStorage.removeItem("token");
+  //   navigate("/");
+  // };
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -96,8 +96,8 @@ const Home = () => {
       <CssBaseline />
       <Header
         setCoordinates={setCoordinates}
-        privateData={privateData}
-        logoutHandler={logoutHandler}
+        // privateData={privateData}
+        // logoutHandler={logoutHandler}
       />
       <Grid container spacing={3} style={{ width: "100%" }}>
         <Grid item xs={12} md={4}>

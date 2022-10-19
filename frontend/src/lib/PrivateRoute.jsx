@@ -1,9 +1,16 @@
 import { Navigate, Outlet, Route } from "react-router-dom";
 
-const PrivateRoute = () => {
-  let token = localStorage.getItem("token");
+import { useContext } from "react";
+import { myContext } from "../components/Context";
 
-  return token ? <Outlet /> : <Navigate to="/" />;
+const PrivateRoute = () => {
+  const contextConsumer = useContext(myContext);
+
+  // let token = localStorage.getItem("token");
+
+  // return token ? <Outlet /> : <Navigate to="/" />;
+
+  // return contextConsumer.privateData ? <Outlet /> : <Navigate to="/" />;
 };
 
 export default PrivateRoute;
