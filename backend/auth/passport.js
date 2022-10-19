@@ -39,7 +39,6 @@ passport.use(
       secretOrKey: "123456",
     },
     function (jwtPayload, cb) {
-      console.log(jwtPayload);
       return User.findById(jwtPayload.user._id)
         .then((user) => {
           return cb(null, user);

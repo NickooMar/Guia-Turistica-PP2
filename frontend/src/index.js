@@ -11,9 +11,9 @@ import { AuthProvider } from "./components/Context/AuthProvider";
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      {/* <AuthProvider> */}
+      <AuthProvider>
         <App />
-      {/* </AuthProvider> */}
+      </AuthProvider>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById("root")

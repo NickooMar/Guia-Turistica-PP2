@@ -17,22 +17,18 @@ function App() {
 
   return (
     <>
-      {/* <BrowserRouter> */}
-      <AuthProvider>
-        <Routes>
-          <Route element={<PrivateRoute />}>
-            <Route path="/home" element={<Home />} />
-            <Route path="/perfil" element={<Perfil />} />
-          </Route>
-        </Routes>
-      </AuthProvider>
+      <Routes>
+        <Route element={<PrivateRoute />}>
+          <Route path="/home" element={<Home />} />
+          <Route path="/perfil" element={<Perfil />} />
+        </Route>
+      </Routes>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="*" element={<Handle404 />} />
       </Routes>
       <ToastContainer />
-      {/* </BrowserRouter> */}
     </>
   );
 }
