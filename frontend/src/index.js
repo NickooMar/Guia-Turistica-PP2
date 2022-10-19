@@ -6,14 +6,14 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { BrowserRouter } from "react-router-dom";
 
-import Context from "./components/Context";
+import { AuthProvider } from "./components/Context/AuthProvider";
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <Context>
+      {/* <AuthProvider> */}
         <App />
-      </Context>
+      {/* </AuthProvider> */}
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById("root")
