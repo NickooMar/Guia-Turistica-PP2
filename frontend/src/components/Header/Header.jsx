@@ -5,7 +5,7 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 import { Autocomplete } from "@react-google-maps/api";
-import { InputBase, Button } from "@material-ui/core";
+import { InputBase } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import useStyles from "./styles";
 
@@ -13,12 +13,11 @@ import { useContext } from "react";
 import AuthContext from "../Context/AuthContext";
 import { Link } from "react-router-dom";
 
-const Header = ({ setCoordinates /* privateData, logoutHandler */ }) => {
+const Header = ({ setCoordinates }) => {
   //Context Logic
-  const { user, setUser, logoutHandler } = useContext(AuthContext);
+  const { user, logoutHandler } = useContext(AuthContext);
 
-  console.log(user)
-
+  console.log(user);
 
   //Styles & Search
   const classes = useStyles();
@@ -155,7 +154,7 @@ const Header = ({ setCoordinates /* privateData, logoutHandler */ }) => {
                       <Menu.Item>
                         {({ active }) => (
                           <Link
-                            to='/perfil'
+                            to="/perfil"
                             className={classNames(
                               active ? "bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700"
@@ -167,6 +166,7 @@ const Header = ({ setCoordinates /* privateData, logoutHandler */ }) => {
                       </Menu.Item>
                       <a
                         onClick={logoutHandler}
+                        href="/"
                         className={classNames(
                           "block px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100"
                         )}

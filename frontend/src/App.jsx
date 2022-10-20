@@ -1,20 +1,12 @@
-import React, { useContext } from "react";
-import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
+import React from "react";
+import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
-import { Home, Login, Register, Handle404 } from "./components";
+import { Home, Login, Register, Handle404, Perfil } from "./components";
 
 import PrivateRoute from "./lib/PrivateRoute";
 
-import AuthContext from "./components/Context/AuthContext";
-import { AuthProvider } from "./components/Context/AuthProvider";
-import Perfil from "./components/Perfil";
-
 function App() {
-  // const contextConsumer = useContext(AuthContext);
-
-  // console.log(contextConsumer);
-
   return (
     <>
       <Routes>
