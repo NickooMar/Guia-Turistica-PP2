@@ -9,6 +9,8 @@ import { InputBase } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import useStyles from "./styles";
 
+import { toast } from "react-toastify";
+
 import { useContext } from "react";
 import AuthContext from "../Context/AuthContext";
 import { Link } from "react-router-dom";
@@ -39,8 +41,10 @@ const Header = ({ setCoordinates }) => {
   //Display Navbar Data
   const navigation = [{ name: "Map", href: "/home", current: true }];
 
+
   return (
     <Disclosure as="nav" className="bg-gray-800">
+
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">

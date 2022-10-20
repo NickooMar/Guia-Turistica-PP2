@@ -47,9 +47,11 @@ const Login = () => {
         .then((data) => {
           localStorage.setItem("token", data.data.token);
           navigate("/home");
+          toast.success('Usuario Logeado Correctamente')
         })
         .catch((err) => {
           console.error(err);
+          toast.error('Email o contraseña incorrectos, Compruebe los datos ingresados')
         });
     } catch (error) {
       console.log(error);
