@@ -95,11 +95,11 @@ const PlaceDetails = ({ place, selected, refProp }) => {
         <Box display="flex" justifyContent="space-between">
           <Rating value={Number(place.rating)} readOnly />
           <Typography gutterBottom variant="subtitle1">
-            Out of {place.num_reviews} reviews
+            {place.num_reviews} Reseñas
           </Typography>
         </Box>
         <Box display="flex" justifyContent="space-between">
-          <Typography variant="subtitle1">Price</Typography>
+          <Typography variant="subtitle1">Precio</Typography>
           <Typography gutterBottom variant="subtitle1">
             {place.price_level}
           </Typography>
@@ -150,8 +150,8 @@ const PlaceDetails = ({ place, selected, refProp }) => {
         <CardActions className="flex justify-between">
           <Button
             size="small"
-            color="secondary"
-            variant="contained"
+            color="primary"
+            variant="outlined"
             onClick={() => window.open(place.website, "_blank")}
           >
             Website
@@ -159,7 +159,7 @@ const PlaceDetails = ({ place, selected, refProp }) => {
 
           <Button
             size="small"
-            color="primary"
+            color="secondary"
             variant="contained"
             onClick={(e) => {
               e.preventDefault();
