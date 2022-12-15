@@ -7,6 +7,7 @@ const session = require("express-session");
 require("dotenv").config();
 
 const userRoutes = require("./routes/user.routes");
+const placeRoutes = require("./routes/place.routes");
 
 const app = express();
 
@@ -27,7 +28,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: "http://localhost:3000",
-    credentials: true,    
+    credentials: true,
   })
 );
 
@@ -47,6 +48,7 @@ app.use(passport.session());
 //Rutas
 
 app.use(userRoutes);
+app.use(placeRoutes);
 
 //----------------------------
 

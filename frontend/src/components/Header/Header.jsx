@@ -9,8 +9,6 @@ import { InputBase } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import useStyles from "./styles";
 
-import { toast } from "react-toastify";
-
 import { useContext } from "react";
 import AuthContext from "../Context/AuthContext";
 import { Link } from "react-router-dom";
@@ -18,8 +16,6 @@ import { Link } from "react-router-dom";
 const Header = ({ setCoordinates }) => {
   //Context Logic
   const { user, logoutHandler } = useContext(AuthContext);
-
-  console.log(user);
 
   //Styles & Search
   const classes = useStyles();
@@ -165,6 +161,19 @@ const Header = ({ setCoordinates }) => {
                             )}
                           >
                             Perfil
+                          </Link>
+                        )}
+                      </Menu.Item>
+                      <Menu.Item>
+                        {({ active }) => (
+                          <Link
+                            to="/actualizar"
+                            className={classNames(
+                              active ? "bg-gray-100" : "",
+                              "block px-4 py-2 text-sm text-gray-700"
+                            )}
+                          >
+                            Modificar Usuario
                           </Link>
                         )}
                       </Menu.Item>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import {
   Box,
@@ -14,12 +14,68 @@ import LocationOnIcon from "@material-ui/icons/LocationOn";
 import PhoneIcon from "@material-ui/icons/Phone";
 import Rating from "@material-ui/lab/Rating";
 
+import axios from "axios";
+import AuthContext from "../Context/AuthContext";
+
 import useStyles from "./styles";
+
+import { toast } from "react-toastify";
 
 const PlaceDetails = ({ place, selected, refProp }) => {
   const classes = useStyles();
 
-  if (selected) refProp?.current?.scrollIntoView({ behaviour: "smooth", block: "start" });
+  const { user } = useContext(AuthContext);
+
+  if (selected)
+    refProp?.current?.scrollIntoView({ behaviour: "smooth", block: "start" });
+
+  const handleSavePlace = (
+    placeID,
+    name,
+    rating,
+    price,
+    ranking,
+    image,
+    phone
+  ) => {
+    const userID = user._id;
+
+    const config = {
+      headers: { "Content-Type": "application/json" },
+    };
+
+    try {
+      axios
+        .post(
+          "http://localhost:4000/place",
+          {
+            userID,
+            placeID,
+            name,
+            rating,
+            price,
+            ranking,
+            image,
+            phone,
+          },
+          { withCredentials: true },
+          config
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            console.log(res);
+            toast.success("Sitio guardado Satisfactoriamente");
+          }
+        })
+        .catch((error) => {
+          toast.error(
+            "Sitio anteriormente guardado, por favor, seleccione otro"
+          );
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Card elevation={6}>
@@ -37,7 +93,7 @@ const PlaceDetails = ({ place, selected, refProp }) => {
           {place.name}
         </Typography>
         <Box display="flex" justifyContent="space-between">
-        <Rating value={Number(place.rating)} readOnly />
+          <Rating value={Number(place.rating)} readOnly />
           <Typography gutterBottom variant="subtitle1">
             Out of {place.num_reviews} reviews
           </Typography>
@@ -91,20 +147,34 @@ const PlaceDetails = ({ place, selected, refProp }) => {
           </Typography>
         )}
 
-        <CardActions>
+        <CardActions className="flex justify-between">
           <Button
             size="small"
-            color="primary"
-            onClick={() => window.open(place.web_url, "_blank")}
-          >
-            Trip Advisor
-          </Button>
-          <Button
-            size="small"
-            color="primary"
+            color="secondary"
+            variant="contained"
             onClick={() => window.open(place.website, "_blank")}
           >
             Website
+          </Button>
+
+          <Button
+            size="small"
+            color="primary"
+            variant="contained"
+            onClick={(e) => {
+              e.preventDefault();
+              handleSavePlace(
+                place?.location_id,
+                place?.name,
+                place?.rating,
+                place?.price_level,
+                place?.ranking,
+                place?.photo.images.large.url,
+                place?.phone
+              );
+            }}
+          >
+            Guardar
           </Button>
         </CardActions>
       </CardContent>

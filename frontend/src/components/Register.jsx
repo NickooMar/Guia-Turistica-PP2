@@ -22,7 +22,7 @@ const Register = () => {
     if (token) {
       navigate("/home");
     }
-  }, []);
+  }, [token, navigate]);
 
   const handleInputChange = (event) => {
     setUser({ ...user, [event.target.name]: event?.target?.value });
@@ -32,6 +32,10 @@ const Register = () => {
     e.preventDefault();
 
     const { email, username, password, confirmPassword } = user;
+
+    if (!email || !username || !password || !confirmPassword) {
+      return toast.error("Debe proporcionar datos validos");
+    }
 
     const config = {
       headers: {
@@ -55,7 +59,7 @@ const Register = () => {
           config
         )
         .then((res) => {
-          if (res.data === "success") {
+          if (res.status === 200) {
             toast.success("Su usuario ha sido creado!");
             navigate("/");
           } else {
@@ -72,7 +76,7 @@ const Register = () => {
   return (
     <div className="bg-gradient-to-r from-cyan-500 to-blue-500 min-h-screen">
       <div className="grid h-screen place-items-center">
-        <div className="flex flex-col items-center bg-white rounded-lg border shadow-md md:flex-row md:max-w-xl dark:border-gray-700 dark:bg-gray-800">
+        <div className="flex items-center bg-white rounded-lg border shadow-md md:flex-row md:max-w-xl dark:border-gray-700 dark:bg-gray-800">
           <h4 className="object-cover w-full h-96 rounded-t-lg md:h-auto md:w-48 md:rounded-none md:rounded-l-lg text-center text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
             Register
           </h4>

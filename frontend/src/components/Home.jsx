@@ -3,7 +3,6 @@ import { CssBaseline, Grid } from "@material-ui/core";
 
 import { useNavigate } from "react-router-dom";
 
-
 //Backend Request
 import axios from "axios";
 
@@ -15,7 +14,9 @@ import Map from "./Map/Map";
 import AuthContext from "./Context/AuthContext";
 
 const Home = () => {
-  AuthGetUser(); //Aqui se llama al context para que me traiga los datos del usuario logeado
+  const { AuthGetUser } = useContext(AuthContext);
+
+  AuthGetUser();
 
   const navigate = useNavigate();
 
@@ -104,30 +105,3 @@ const Home = () => {
 };
 
 export default Home;
-
-function AuthGetUser() {
-  const { setUser } = useContext(AuthContext);
-
-  // Backend User Request UseEffect
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    const fetchPrivateData = async () => {
-      try {
-        axios
-          .get(`http://localhost:4000/user?auth-token=${token}`, {
-            withCredentials: true,
-          })
-          .then((res) => {
-            console.log(res.data);
-            const userPrivateData = res.data;
-            setUser(userPrivateData);
-          });
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchPrivateData();
-  }, [setUser]);
-}
