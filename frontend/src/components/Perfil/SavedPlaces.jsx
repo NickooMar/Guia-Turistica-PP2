@@ -1,15 +1,11 @@
 import { Button } from "@material-ui/core";
-import axios from "axios";
 import React, { useContext } from "react";
-
-import { Carousel } from "react-responsive-carousel";
 
 import AuthContext from "../Context/AuthContext";
 
 const SavedPlaces = () => {
   const { places, handleDeleteSavedPlace } = useContext(AuthContext);
 
-  console.log(places);
 
   return (
     <div className="flex justify-around md:flex-wrap sm:flex-wrap ">

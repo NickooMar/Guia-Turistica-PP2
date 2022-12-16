@@ -14,7 +14,6 @@ import LocationOnIcon from "@material-ui/icons/LocationOn";
 import PhoneIcon from "@material-ui/icons/Phone";
 import Rating from "@material-ui/lab/Rating";
 
-import axios from "axios";
 import AuthContext from "../Context/AuthContext";
 
 import useStyles from "./styles";
@@ -24,12 +23,14 @@ import { toast } from "react-toastify";
 const PlaceDetails = ({ place, selected, refProp }) => {
   const classes = useStyles();
 
-  const { user } = useContext(AuthContext);
+  const { user, savePlaceByUser } = useContext(AuthContext);
+
+  const userID = user?._id;
 
   if (selected)
     refProp?.current?.scrollIntoView({ behaviour: "smooth", block: "start" });
 
-  const handleSavePlace = (
+  const handleSavePlace = async (
     placeID,
     name,
     rating,
@@ -38,40 +39,17 @@ const PlaceDetails = ({ place, selected, refProp }) => {
     image,
     phone
   ) => {
-    const userID = user._id;
-
-    const config = {
-      headers: { "Content-Type": "application/json" },
-    };
-
     try {
-      axios
-        .post(
-          "http://localhost:4000/place",
-          {
-            userID,
-            placeID,
-            name,
-            rating,
-            price,
-            ranking,
-            image,
-            phone,
-          },
-          { withCredentials: true },
-          config
-        )
-        .then((res) => {
-          if (res.status === 200) {
-            console.log(res);
-            toast.success("Sitio guardado Satisfactoriamente");
-          }
-        })
-        .catch((error) => {
-          toast.error(
-            "Sitio anteriormente guardado, por favor, seleccione otro"
-          );
-        });
+      savePlaceByUser(
+        userID,
+        placeID,
+        name,
+        rating,
+        price,
+        ranking,
+        image,
+        phone
+      );
     } catch (error) {
       console.log(error);
     }

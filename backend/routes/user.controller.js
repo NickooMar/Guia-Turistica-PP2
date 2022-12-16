@@ -68,15 +68,11 @@ function getUser(req, res) {
 const updateUser = asyncHandler(async (req, res) => {
   const { id, username, email } = req.body;
 
-  console.log({ id, username, email });
-
   if (!id || !username || !email) {
     return res.status(400).json({ message: "Datos invalidos" });
   }
 
   const userFound = await User.findById(id).exec();
-
-  console.log(userFound);
 
   const duplicate = await User.findOne({ email }).lean().exec();
 
@@ -88,8 +84,6 @@ const updateUser = asyncHandler(async (req, res) => {
   userFound.email = email;
 
   const updatedUser = await userFound.save();
-
-  console.log(updatedUser);
 
   res.json({ message: `User: ${updatedUser?.username} updated` });
 });

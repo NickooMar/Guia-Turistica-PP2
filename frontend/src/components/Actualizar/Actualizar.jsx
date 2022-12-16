@@ -12,7 +12,8 @@ import AuthContext from "../Context/AuthContext";
 import { toast } from "react-toastify";
 
 const Actualizar = () => {
-  const { user, logoutHandler } = useContext(AuthContext);
+  const { user, handleUpdateUser, deleteUser, logoutHandler } =
+    useContext(AuthContext);
 
   const navigate = useNavigate();
   const initialState = {
@@ -29,73 +30,33 @@ const Actualizar = () => {
     });
   };
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     const { id, username, email } = updatedUser;
 
     e.preventDefault();
 
-    const config = {
-      headers: { "Content-Type": "application/json" },
-    };
-
     try {
-      axios
-        .patch(
-          "http://localhost:4000/user",
-          {
-            id,
-            username,
-            email,
-          },
-          {
-            withCredentials: true,
-          },
-          config
-        )
-        .then((data) => {
-          navigate("/home");
-          toast.success("Usuario Actualizado Correctamente");
-        })
-        .catch((err) => {
-          console.error(err);
-          toast.error("Pruebe con un email no existente");
-        });
+      handleUpdateUser(id, username, email);
+      navigate("/home");
+      toast.success("Usuario Actualizado Correctamente");
     } catch (error) {
       console.log(error);
-      setTimeout(() => {}, 5000);
-      navigate("/home");
+      toast.error("Ocurrio un problema al intentar modificar el usuario");
     }
   }
 
   function handleDeleteUser() {
     const { id } = updatedUser;
 
-    const config = {
-      headers: { "Content-Type": "application/json" },
-    };
-
     if (
       window.confirm(
-        `¿Seguro que quieres eliminar el usuario ${updatedUser?.username}?`
+        `¿Seguro que quieres eliminar el usuario ${updatedUser?.username.toUpperCase()}?`
       )
     ) {
       try {
-        axios
-          .delete(
-            "http://localhost:4000/user",
-            {
-              data: { id },
-            },
-            {
-              withCredentials: true,
-            },
-            config
-          )
-          .then((data) => {
-            logoutHandler();
-            setTimeout(() => {}, 5000);
-            toast.success("Usuario Eliminado Correctamente");
-          });
+        deleteUser(id);
+        logoutHandler();
+        toast.success("Usuario Eliminado Correctamente");
       } catch (error) {
         console.log(error);
       }

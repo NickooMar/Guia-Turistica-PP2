@@ -13,7 +13,7 @@ const savePlace = asyncHandler(async (req, res) => {
     }
   );
 
-  if (duplicate.places.length > 0) {
+  if (duplicate?.places?.length > 0) {
     const errorResponse = "El lugar ya ha sido guardado anteriormente";
     return res.status(409).json(errorResponse);
   } else if (duplicate.places.length === 0) {

@@ -1,10 +1,15 @@
 import { useState, useEffect } from "react";
 import AuthContext from "./AuthContext";
 
-import axios from "axios";
-
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+
+import {
+  handleDeleteSavedPlaceRequest,
+  getPrivateDataRequest,
+  patchUpdateUserRequest,
+  deleteUserRequest,
+  savePlaceRequest,
+} from "../../api/index";
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState();
@@ -25,15 +30,10 @@ export const AuthProvider = ({ children }) => {
 
       const fetchPrivateData = async () => {
         try {
-          await axios
-            .get(`http://localhost:4000/user?auth-token=${token}`, {
-              withCredentials: true,
-            })
-            .then((res) => {
-              const userPrivateData = res.data;
-              setPlaces(res.data?.places);
-              setUser(userPrivateData);
-            });
+          const response = await getPrivateDataRequest(token);
+          const userPrivateData = response.data;
+          setPlaces(response.data?.places);
+          setUser(userPrivateData);
         } catch (error) {
           console.log(error);
         }
@@ -45,20 +45,54 @@ export const AuthProvider = ({ children }) => {
 
   // Delete Place saved by user
   const handleDeleteSavedPlace = async (id) => {
-    const userID = user?._id;
-
     try {
-      axios
-        .delete("http://localhost:4000/place", {
-          data: { userID, id },
-        })
-        .then((res) => {
-          if (res.status == 200) {
-            toast.success("Lugar eliminado correctamente");
+      await handleDeleteSavedPlaceRequest(user?._id, id);
+      setPlaces(places.filter((place) => place.placeID !== id));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-            setPlaces(places.filter((place) => place.placeID != id));
-          }
-        });
+  // Update user data
+  const handleUpdateUser = async (id, username, email) => {
+    try {
+      await patchUpdateUserRequest(id, username, email);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Delete User
+  const deleteUser = async (id) => {
+    try {
+      await deleteUserRequest(id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //Save place by user
+  const savePlaceByUser = async (
+    userID,
+    placeID,
+    name,
+    rating,
+    price,
+    ranking,
+    image,
+    phone
+  ) => {
+    try {
+      const savePlaceResponse = await savePlaceRequest(
+        userID,
+        placeID,
+        name,
+        rating,
+        price,
+        ranking,
+        image,
+        phone
+      );
     } catch (error) {
       console.log(error);
     }
@@ -69,9 +103,12 @@ export const AuthProvider = ({ children }) => {
       value={{
         AuthGetUser,
         user,
+        places,
         logoutHandler,
         handleDeleteSavedPlace,
-        places,
+        handleUpdateUser,
+        deleteUser,
+        savePlaceByUser,
       }}
     >
       {children}

@@ -18,8 +18,6 @@ const Perfil = () => {
 
   AuthGetUser();
 
-  console.log(user);
-
   const navigate = useNavigate();
 
   return (
@@ -53,10 +51,7 @@ const Perfil = () => {
             </div>
           ) : (
             <div className="my-8">
-              <Typography
-                variant="h5"
-                className="text-center text-gray-500"
-              >
+              <Typography variant="h5" className="text-center text-gray-500">
                 No hay sitios guardados
               </Typography>
             </div>
