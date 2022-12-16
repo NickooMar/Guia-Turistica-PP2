@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
-import axios from "axios";
+import { createUserRequest } from "../api/index";
+
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -37,36 +38,22 @@ const Register = () => {
       return toast.error("Debe proporcionar datos validos");
     }
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
     if (password === confirmPassword) {
-      axios
-        .post(
-          "http://localhost:4000/register",
-          {
-            email,
-            username,
-            password,
-            confirmPassword,
-          },
-          {
-            withCredentials: true,
-          },
-          config
-        )
-        .then((res) => {
-          if (res.status === 200) {
-            toast.success("Su usuario ha sido creado!");
-            navigate("/");
-          } else {
-            setUser(initialState);
-            toast.error("El usuario o email ya existe");
+      try {
+        createUserRequest(email, username, password, confirmPassword).then(
+          (res) => {
+            if (res.status === 200) {
+              toast.success("Usuario creado satisfactoriamente");
+              navigate("/");
+            } else {
+              setUser(initialState);
+              toast.error("El usuario o email ya existe");
+            }
           }
-        });
+        );
+      } catch (error) {
+        console.log(error);
+      }
     } else {
       setUser(initialState);
       toast.error("Las contraseñas no coinciden");
@@ -84,7 +71,6 @@ const Register = () => {
             <h5 className="mb-2 text-2xl font-normal mr-8 tracking-tight text-gray-900 dark:text-white">
               Ingrese su email y contraseña
             </h5>
-
             <div id="emailInputReference">
               <p className="mb-1  mt-4  font-normal text-gray-500 dark:text-gray-200">
                 Email
@@ -113,7 +99,6 @@ const Register = () => {
                 />
               </div>
             </div>
-
             <div id="usernameInputReference">
               <p className="mb-1  mt-4  font-normal text-gray-500 dark:text-gray-200">
                 Nombre de Usario
@@ -149,7 +134,6 @@ const Register = () => {
                 />
               </div>
             </div>
-
             <div id="passwordInputReference">
               <p className="mb-1 mt-4 font-normal text-gray-500 dark:text-gray-200">
                 Contraseña
@@ -177,7 +161,6 @@ const Register = () => {
                 />
               </div>
             </div>
-
             <div id="confirmPasswordInputReference">
               <p className="mb-1 mt-4 font-normal text-gray-500 dark:text-gray-200">
                 Confirmar Contraseña
@@ -205,7 +188,23 @@ const Register = () => {
                 />
               </div>
             </div>
-
+            {/*
+            //TODO PROFILE IMAGE UPLOAD
+            <div id="profileImageUploadReference">
+              <p className="mb-1 mt-4 font-normal text-gray-500 dark:text-gray-200">
+                Foto de perfil
+              </p>
+              <div className="mr-2">
+                <input
+                  type="file"
+                  id="profileImageInput"
+                  name="profileImageInput"
+                  className="bg-gray-50 border border-gray-300 text-gray-700 text-sm rounded-lg block w-full p-1 dark:bg-gray-800 dark:border-gray-800 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  onChange={handleInputChange}
+                />
+              </div>
+            </div>
+            */}
             <button
               type="submit"
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm mt-6 px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"

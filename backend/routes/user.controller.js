@@ -10,9 +10,11 @@ const asyncHandler = require("express-async-handler");
 const createUser = asyncHandler(async (req, res) => {
   const { email, username, password, confirmPassword } = req?.body;
 
-  User.findOne({ $or: [{ email }, { username }] }, async (err, doc) => {
+  User.findOne({ email }, async (err, doc) => {
     if (err) throw err;
-    if (doc) res.send("User already Exists");
+    if (doc) {
+      return res.status(400).json({ message: "Cuenta ya existente" });
+    }
     if (!doc) {
       if (password === confirmPassword) {
         try {
@@ -25,7 +27,7 @@ const createUser = asyncHandler(async (req, res) => {
 
           await newUser.save();
 
-          res.status(200);
+          return res.status(200).json({ message: "Creado satisfactoriamente" });
         } catch (error) {
           return res.status(400).json({ message: "Error" });
         }

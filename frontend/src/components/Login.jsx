@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 
-import { Link } from "react-router-dom";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { loginUser } from "../api/index";
+
 import { toast } from "react-toastify";
+
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -27,23 +29,8 @@ const Login = () => {
 
     e.preventDefault();
 
-    const config = {
-      headers: { "Content-Type": "application/json" },
-    };
-
     try {
-      axios
-        .post(
-          "http://localhost:4000/login",
-          {
-            email,
-            password,
-          },
-          {
-            withCredentials: true,
-          },
-          config
-        )
+      loginUser(email, password)
         .then((data) => {
           localStorage.setItem("token", data.data.token);
           navigate("/home");
@@ -55,6 +42,30 @@ const Login = () => {
             "Email o contraseña incorrectos, Compruebe los datos ingresados"
           );
         });
+
+      // axios
+      //   .post(
+      //     "http://localhost:4000/login",
+      //     {
+      //       email,
+      //       password,
+      //     },
+      //     {
+      //       withCredentials: true,
+      //     },
+      //     config
+      //   )
+      //   .then((data) => {
+      //     localStorage.setItem("token", data.data.token);
+      //     navigate("/home");
+      //     toast.success("Usuario Logeado Correctamente");
+      //   })
+      //   .catch((err) => {
+      //     console.error(err);
+      //     toast.error(
+      //       "Email o contraseña incorrectos, Compruebe los datos ingresados"
+      //     );
+      //   });
     } catch (error) {
       console.log(error);
       setTimeout(() => {}, 5000);

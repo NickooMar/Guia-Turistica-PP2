@@ -42,8 +42,51 @@ export const getWeatherData = async (lat, lng) => {
     );
 
     return data;
+  } catch (error) {}
+};
+
+// Crear nuevo usuario
+export const createUserRequest = async (
+  email,
+  username,
+  password,
+  confirmPassword
+) => {
+  try {
+    const createUserResponse = await axios.post(
+      "http://localhost:4000/register",
+      {
+        email,
+        username,
+        password,
+        confirmPassword,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+    return createUserResponse;
   } catch (error) {
-    
+    console.log(error);
+  }
+};
+
+// Login del usuario
+export const loginUser = async (email, password) => {
+  try {
+    const loginUserResponse = await axios.post(
+      "http://localhost:4000/login",
+      {
+        email,
+        password,
+      },
+      {
+        withCredentials: true,
+      }
+    );
+    return loginUserResponse;
+  } catch (error) {
+    console.log(error);
   }
 };
 
