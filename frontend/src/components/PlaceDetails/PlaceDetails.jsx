@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import {
   Box,
@@ -14,12 +14,46 @@ import LocationOnIcon from "@material-ui/icons/LocationOn";
 import PhoneIcon from "@material-ui/icons/Phone";
 import Rating from "@material-ui/lab/Rating";
 
+import AuthContext from "../Context/AuthContext";
+
 import useStyles from "./styles";
+
+import { toast } from "react-toastify";
 
 const PlaceDetails = ({ place, selected, refProp }) => {
   const classes = useStyles();
 
-  if (selected) refProp?.current?.scrollIntoView({ behaviour: "smooth", block: "start" });
+  const { user, savePlaceByUser } = useContext(AuthContext);
+
+  const userID = user?._id;
+
+  if (selected)
+    refProp?.current?.scrollIntoView({ behaviour: "smooth", block: "start" });
+
+  const handleSavePlace = async (
+    placeID,
+    name,
+    rating,
+    price,
+    ranking,
+    image,
+    phone
+  ) => {
+    try {
+      savePlaceByUser(
+        userID,
+        placeID,
+        name,
+        rating,
+        price,
+        ranking,
+        image,
+        phone
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Card elevation={6}>
@@ -37,13 +71,13 @@ const PlaceDetails = ({ place, selected, refProp }) => {
           {place.name}
         </Typography>
         <Box display="flex" justifyContent="space-between">
-        <Rating value={Number(place.rating)} readOnly />
+          <Rating value={Number(place.rating)} readOnly />
           <Typography gutterBottom variant="subtitle1">
-            Out of {place.num_reviews} reviews
+            {place.num_reviews} Reseñas
           </Typography>
         </Box>
         <Box display="flex" justifyContent="space-between">
-          <Typography variant="subtitle1">Price</Typography>
+          <Typography variant="subtitle1">Precio</Typography>
           <Typography gutterBottom variant="subtitle1">
             {place.price_level}
           </Typography>
@@ -91,20 +125,34 @@ const PlaceDetails = ({ place, selected, refProp }) => {
           </Typography>
         )}
 
-        <CardActions>
+        <CardActions className="flex justify-between">
           <Button
             size="small"
             color="primary"
-            onClick={() => window.open(place.web_url, "_blank")}
-          >
-            Trip Advisor
-          </Button>
-          <Button
-            size="small"
-            color="primary"
+            variant="outlined"
             onClick={() => window.open(place.website, "_blank")}
           >
             Website
+          </Button>
+
+          <Button
+            size="small"
+            color="secondary"
+            variant="contained"
+            onClick={(e) => {
+              e.preventDefault();
+              handleSavePlace(
+                place?.location_id,
+                place?.name,
+                place?.rating,
+                place?.price_level,
+                place?.ranking,
+                place?.photo.images.large.url,
+                place?.phone
+              );
+            }}
+          >
+            Guardar
           </Button>
         </CardActions>
       </CardContent>

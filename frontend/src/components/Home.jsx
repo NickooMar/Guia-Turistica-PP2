@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { CssBaseline, Grid } from "@material-ui/core";
 
+import { useNavigate } from "react-router-dom";
+
 //Backend Request
 import axios from "axios";
 
@@ -8,10 +10,23 @@ import { getPlacesData, getWeatherData } from "../api";
 import Header from "./Header/Header";
 import List from "./List/List";
 import Map from "./Map/Map";
-import { Link, useNavigate } from "react-router-dom";
+
+import AuthContext from "./Context/AuthContext";
 
 const Home = () => {
-  const [privateData, setPrivateData] = useState(null);
+  const { AuthGetUser } = useContext(AuthContext);
+
+  AuthGetUser();
+
+  const navigate = useNavigate();
+
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/");
+    }
+  }, [token, navigate]);
 
   const [places, setPlaces] = useState([]);
   const [filteredPlaces, setFilteredPlaces] = useState([]);
@@ -26,40 +41,6 @@ const Home = () => {
 
   const [type, setType] = useState("restaurants");
   const [rating, setRating] = useState(0);
-
-  const navigate = useNavigate();
-
-  //Backend User Request UseEffect
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      navigate("/");
-    }
-
-    const fetchPrivateData = async () => {
-      try {
-        axios
-          .get(`http://localhost:4000/user?auth-token=${token}`, {
-            withCredentials: true,
-          })
-          .then((res) => {
-            const userPrivateData = res.data;
-            setPrivateData(userPrivateData);
-          });
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchPrivateData();
-  }, []);
-
-  //Logout User
-  const logoutHandler = () => {
-    localStorage.removeItem("token");
-    navigate("/");
-  };
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -94,11 +75,7 @@ const Home = () => {
   return (
     <>
       <CssBaseline />
-      <Header
-        setCoordinates={setCoordinates}
-        privateData={privateData}
-        logoutHandler={logoutHandler}
-      />
+      <Header setCoordinates={setCoordinates} />
       <Grid container spacing={3} style={{ width: "100%" }}>
         <Grid item xs={12} md={4}>
           {/*This xs take full width on mobile devices, in medium or larger devices take 4 spaces.*/}

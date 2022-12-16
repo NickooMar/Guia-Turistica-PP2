@@ -5,12 +5,18 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 
 import { Autocomplete } from "@react-google-maps/api";
-import { InputBase, Button } from "@material-ui/core";
+import { InputBase } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import useStyles from "./styles";
-import axios from "axios";
 
-const Header = ({ setCoordinates, privateData, logoutHandler }) => {
+import { useContext } from "react";
+import AuthContext from "../Context/AuthContext";
+import { Link } from "react-router-dom";
+
+const Header = ({ setCoordinates }) => {
+  //Context Logic
+  const { user, logoutHandler } = useContext(AuthContext);
+
   //Styles & Search
   const classes = useStyles();
   const [autocomplete, setAutocomplete] = useState(null);
@@ -31,8 +37,10 @@ const Header = ({ setCoordinates, privateData, logoutHandler }) => {
   //Display Navbar Data
   const navigation = [{ name: "Map", href: "/home", current: true }];
 
+
   return (
     <Disclosure as="nav" className="bg-gray-800">
+
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -107,8 +115,7 @@ const Header = ({ setCoordinates, privateData, logoutHandler }) => {
               </div>
 
               <h2 className="hidden sm:block text-slate-200 hover:text-white font-medium text-lg pr-2">
-                {/* Bienvenido {username?.toUpperCase()} */}
-                Bienvenido {privateData?.username}
+                Bienvenido {user?.username}
               </h2>
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:pr-0">
                 {/* Profile dropdown */}
@@ -136,40 +143,43 @@ const Header = ({ setCoordinates, privateData, logoutHandler }) => {
                     <Menu.Items className="absolute right-0 z-10 mt-4 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <div className="columns-3 m-1.5 pt-1 pl-2.5">
                         <img
-                          // ring-2 outline-none ring-black ring-offset-2 ring-offset-gray-800
                           className="h-8 w-8 rounded-full text-sm outline-none ring-2 ring-offset-2 ring-offset-slate-100 "
                           src="https://images.unsplash.com/photo-1574864745093-5566c5be5855?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
                           alt="Perfil img"
                         />
                         <h2 className="flex justify-center pt-0.5 text-lg font-light">
-                          {privateData?.username.toUpperCase()}
+                          {user?.username.toUpperCase()}
                         </h2>
                       </div>
                       <Menu.Item>
                         {({ active }) => (
-                          <a
-                            href="#"
+                          <Link
+                            to="/perfil"
                             className={classNames(
                               active ? "bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700"
                             )}
                           >
                             Perfil
-                          </a>
+                          </Link>
                         )}
                       </Menu.Item>
-                      {/* <Menu.Item>
-                          {({ active }) => (
-                            <a
-                              href="#"
-                              className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
-                            >
-                              Settings
-                            </a>
-                          )}
-                        </Menu.Item> */}
+                      <Menu.Item>
+                        {({ active }) => (
+                          <Link
+                            to="/actualizar"
+                            className={classNames(
+                              active ? "bg-gray-100" : "",
+                              "block px-4 py-2 text-sm text-gray-700"
+                            )}
+                          >
+                            Modificar Usuario
+                          </Link>
+                        )}
+                      </Menu.Item>
                       <a
                         onClick={logoutHandler}
+                        href="/"
                         className={classNames(
                           "block px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100"
                         )}

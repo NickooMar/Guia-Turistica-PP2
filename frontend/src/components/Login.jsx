@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const Login = () => {
@@ -16,7 +16,7 @@ const Login = () => {
     if (token) {
       navigate("/home");
     }
-  }, []);
+  }, [token, navigate]);
 
   const habdleInputChange = (event) => {
     setUser({ ...user, [event.target.name]: event?.target?.value });
@@ -47,9 +47,13 @@ const Login = () => {
         .then((data) => {
           localStorage.setItem("token", data.data.token);
           navigate("/home");
+          toast.success("Usuario Logeado Correctamente");
         })
         .catch((err) => {
           console.error(err);
+          toast.error(
+            "Email o contraseña incorrectos, Compruebe los datos ingresados"
+          );
         });
     } catch (error) {
       console.log(error);
@@ -60,7 +64,7 @@ const Login = () => {
   return (
     <div className="bg-gradient-to-r from-cyan-500 to-blue-500 min-h-screen">
       <div className="grid h-screen place-items-center">
-        <div className="flex flex-col items-center bg-white rounded-lg border shadow-md md:flex-row md:max-w-xl dark:border-gray-700 dark:bg-gray-800">
+        <div className="flex items-center bg-white rounded-lg border shadow-md md:flex-row md:max-w-xl dark:border-gray-700 dark:bg-gray-800">
           <h4 className="object-cover w-full h-96 rounded-t-lg md:h-auto md:w-48 md:rounded-none md:rounded-l-lg text-center text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
             Login
           </h4>
@@ -133,12 +137,14 @@ const Login = () => {
               Ingresar
             </button>
             <h1 className="text-white mt-2">No tienes cuenta?</h1>
-            <button
-              type="button"
-              className="bg-slate-300 hover:bg-slate-300 focus:ring-4 focus:ring-slate-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mt-4 mb-2 dark:bg-slate-300 dark:hover:bg-slate-300 focus:outline-none dark:focus:ring-slate-300"
-            >
-              <Link to="/register">Registrarse</Link>
-            </button>
+            <Link to="/register">
+              <button
+                type="button"
+                className="bg-slate-300 hover:bg-slate-300 focus:ring-4 focus:ring-slate-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mt-4 mb-2 dark:bg-slate-300 dark:hover:bg-slate-300 focus:outline-none dark:focus:ring-slate-300"
+              >
+                Registrarse
+              </button>
+            </Link>
           </div>
         </div>
       </div>

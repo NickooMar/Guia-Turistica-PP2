@@ -4,9 +4,17 @@ import App from "./App";
 import "./index.css";
 import "react-toastify/dist/ReactToastify.css";
 
+import { BrowserRouter } from "react-router-dom";
+
+import { AuthProvider } from "./components/Context/AuthProvider";
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById("root")
 );
